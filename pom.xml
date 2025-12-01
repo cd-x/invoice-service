@@ -67,6 +67,11 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-native-image-extension-maven</artifactId>
+				<version>0.1.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -86,10 +91,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.graalvm.buildtools</groupId>
-				<artifactId>native-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -101,6 +102,13 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>0.10.2</version> <!-- check latest -->
+			</plugin>
+
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
@@ -110,7 +118,13 @@
 						<ports>
 							<port>8085</port>
 						</ports>
+						<entrypoint>
+							<arg>/invoice-service</arg> <!-- binary path in image -->
+						</entrypoint>
 					</container>
+					<from>
+						<image>gcr.io/distroless/base</image>
+					</from>
 					<to>
 						<image>registry.hub.docker.com/rrishi633/invoice-service</image>
 					</to>
